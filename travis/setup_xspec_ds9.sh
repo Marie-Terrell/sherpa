@@ -54,7 +54,7 @@ download  $ds9_base_url/$ds9_os/$xpa_tar
 
 # untar them
 start_dir=$(pwd)
-cd ${miniconda}/bin
+cd ${CONDA_PREFIX}/bin
 tar xf ${start_dir}/${ds9_tar}
 tar xf ${start_dir}/${xpa_tar}
 cd -
