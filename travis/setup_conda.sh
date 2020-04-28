@@ -35,8 +35,6 @@ conda update --yes conda
 # https://github.com/sherpa/sherpa/pull/794#issuecomment-616570995 )
 # the XSPEC-related channels are only added if needed
 #
-if [ -n "${XSPECVER}" ]; then conda config --add channels conda-forge; fi
-
 conda config --add channels ${sherpa_channel}
 if [ -n "${XSPECVER}" ]; then conda config --add channels ${xspec_channel}; fi
 conda config --add channels anaconda
@@ -44,6 +42,7 @@ conda config --add channels anaconda
 # Figure out requested dependencies
 if [ -n "${MATPLOTLIBVER}" ]; then MATPLOTLIB="matplotlib=${MATPLOTLIBVER}"; fi
 if [ -n "${NUMPYVER}" ]; then NUMPY="numpy=${NUMPYVER}"; fi
+# Xspec >=12.10.1n Conda package includes wcslib & CCfits and pulls in cfitsio & fftw
 if [ -n "${XSPECVER}" ];
  then export XSPEC="xspec-modelsonly=${XSPECVER} ${xorg}";
 fi
