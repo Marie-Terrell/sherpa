@@ -15,18 +15,16 @@ else  # osx
 fi
 
 # Download and install conda
-wget http://repo.continuum.io/miniconda/Miniconda3-latest-${miniconda_os}-x86_64.sh -O miniconda.sh
+wget http://repo.anaconda.com/miniconda/Miniconda3-latest-${miniconda_os}-x86_64.sh -O miniconda.sh
 chmod +x miniconda.sh
 ./miniconda.sh -b -p $miniconda
-export PATH=$miniconda/bin:$PATH
+
+#Source the Conda profile
+source $miniconda/etc/profile.d/conda.sh
 
 # update and add channels
 conda update --yes conda
 
-# Note the order of the channels matter. We built the xspec conda packages for macos using the conda-forge channel
-# with the highest priority, so we add it with a higher priority than the default channels, but with less priority
-# than our own channels, so that we don't accidentally get conda-forge packages for cfitsio/ccfits.
-#
 # To avoid issues with non-XSPEC builds (e.g.
 # https://github.com/sherpa/sherpa/pull/794#issuecomment-616570995 )
 # the XSPEC-related channels are only added if needed
@@ -40,7 +38,7 @@ if [ -n "${MATPLOTLIBVER}" ]; then MATPLOTLIB="matplotlib=${MATPLOTLIBVER}"; fi
 if [ -n "${NUMPYVER}" ]; then NUMPY="numpy=${NUMPYVER}"; fi
 # Xspec >=12.10.1n Conda package includes wcslib & CCfits and pulls in cfitsio & fftw
 if [ -n "${XSPECVER}" ];
- then export XSPEC="xspec-modelsonly=${XSPECVER} ${xorg}";
+ then export XSPEC="xspec-modelsonly=${XSPECVER}";
 fi
 if [ "${DOCS}" == true ];
  then export DOCSBUILD="sphinx sphinx_rtd_theme graphviz";
@@ -58,7 +56,7 @@ FITSBUILD="${FITS}"
 # We create a new environment so we don't care about the python version in the root environment.
 conda create --yes -n build python=${TRAVIS_PYTHON_VERSION} pip ${MATPLOTLIB} ${NUMPY} ${XSPEC} ${FITSBUILD} ${DOCSBUILD} ${compilers}
 
-source activate build
+conda activate build
 
 # It looks like on some systems (well, linux) the F90 variable needs to be set. Not sure why
 export F90=${F77}
