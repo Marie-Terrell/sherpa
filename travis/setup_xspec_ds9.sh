@@ -30,7 +30,6 @@ then
 
 else  # osx
     ds9_os=darwinsierra
-    export DYLD_LIBRARY_PATH=${xspec_root}/lib
 
     # It looks like xvfb doesn't "just work" on osx travis, so...
     sudo Xvfb :99 -ac -screen 0 1024x768x8 &
