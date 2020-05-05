@@ -11,7 +11,9 @@ then
     compilers="gcc_linux-64 gxx_linux-64 gfortran_linux-64"
 else  # osx
     miniconda_os=MacOSX
-    compilers="clang_osx-64 clangxx_osx-64 gfortran_osx-64"
+    #Test against the system compilers for Travis osx builds
+    # Conda compilers seem to conflict with Travis compilers/flags
+#    compilers="clang_osx-64 clangxx_osx-64 gfortran_osx-64"
 fi
 
 # Download and install conda
