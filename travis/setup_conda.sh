@@ -72,8 +72,8 @@ export PYTHON_LDFLAGS=" "
 
 if [[ ${TRAVIS_OS_NAME} == osx ]];
 then
-    export CFLAGS="${CFLAGS} -isysroot `xcrun --show-sdk-path`"
-    export CXXFLAGS="${CXXFLAGS} -isysroot `xcrun --show-sdk-path`"
+    export CFLAGS="${CFLAGS} -isysroot `xcrun --show-sdk-path` -mmacosx-version-min=10.9"
+    export CXXFLAGS="${CXXFLAGS} -isysroot `xcrun --show-sdk-path` -mmacosx-version-min=10.9"
     echo "CFLAGS=${CFLAGS}"
     echo "CXXFLAGS="${CFLAGS}""
 fi
