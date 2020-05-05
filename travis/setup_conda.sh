@@ -19,8 +19,6 @@ else  # osx
     export CONDA_BUILD_SYSROOT="`xcrun --sdk macosx --show-sdk-path`"
     echo "CONDA_BUILD_SYROOT=${CONDA_BUILD_SYSROOT}"
     ls $CONDA_BUILD_SYSROOT
-    export CFLAGS="-isysroot=`xcrun --show-sdk-path`"
-    export CXXFLAGS="-isysroot=`xcrun --show-sdk-path`"
 fi
 
 # Download and install conda
@@ -71,3 +69,11 @@ export F90=${F77}
 
 # This is required to make sure that the CIAO python extensions being built pick the correct flags
 export PYTHON_LDFLAGS=" "
+
+if [[ ${TRAVIS_OS_NAME} == osx ]];
+then
+    export CFLAGS="${CFLAGS} -isysroot=`xcrun --show-sdk-path`"
+    export CXXFLAGS="${CXXFLAGS} -isysroot=`xcrun --show-sdk-path`"
+    echo "CFLAGS=${CFLAGS}"
+    echo "CXXFLAGS="${CFLAGS}""
+fi
