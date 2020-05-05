@@ -14,11 +14,13 @@ else  # osx
     #Unset the Travis compiler variables to force use of the Conda compiler
     unset CC CFLAGS CXXFLAGS
     compilers="clang_osx-64 clangxx_osx-64 gfortran_osx-64"
-    #Set the location of the macOS 10.9 SDK for the Conda Compilers to work
+    #Set the location of the macOS SDK for the Conda Compilers to work
     # Not needed if not using the Conda compilers
-    ls /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/
-    echo "CONDA_BUILD_SYSROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
-    export CONDA_BUILD_SYSROOT="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk" 
+    export CONDA_BUILD_SYSROOT="`xcrun --sdk macosx --show-sdk-path`"
+    echo "CONDA_BUILD_SYROOT=${CONDA_BUILD_SYSROOT}"
+    ls $CONDA_BUILD_SYSROOT
+    export CFLAGS="--sysroot=`xcrun --show-sdk-path`"
+    export CXXFLAGS="--sysroot=`xcrun --show-sdk-path`"
 fi
 
 # Download and install conda
