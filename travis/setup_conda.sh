@@ -11,9 +11,12 @@ then
     compilers="gcc_linux-64 gxx_linux-64 gfortran_linux-64"
 else  # osx
     miniconda_os=MacOSX
-    #Test against the system compilers for Travis osx builds
-    # Conda compilers seem to conflict with Travis compilers/flags
-#    compilers="clang_osx-64 clangxx_osx-64 gfortran_osx-64"
+    #Unset the Travis compiler variables to force use of the Conda compiler
+    unset CC CFLAGS CXXFLAGS
+    compilers="clang_osx-64 clangxx_osx-64 gfortran_osx-64"
+    #Set the location of the macOS 10.9 SDK for the Conda Compilers to work
+    # Not needed if not using the Conda compilers
+    export CONDA_BUILD_SYSROOT="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk" 
 fi
 
 # Download and install conda
