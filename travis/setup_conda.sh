@@ -19,8 +19,8 @@ else  # osx
     export CONDA_BUILD_SYSROOT="`xcrun --sdk macosx --show-sdk-path`"
     echo "CONDA_BUILD_SYROOT=${CONDA_BUILD_SYSROOT}"
     ls $CONDA_BUILD_SYSROOT
-    export CFLAGS="--sysroot=`xcrun --show-sdk-path`"
-    export CXXFLAGS="--sysroot=`xcrun --show-sdk-path`"
+    export CFLAGS="-isysroot=`xcrun --show-sdk-path`"
+    export CXXFLAGS="-isysroot=`xcrun --show-sdk-path`"
 fi
 
 # Download and install conda
