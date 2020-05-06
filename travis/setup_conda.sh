@@ -19,7 +19,7 @@ else  # osx
     #Download and set the location of the macOS 10.9 SDK for the Conda Compilers to work
     # Not needed if not using the Conda compilers
     mkdir -p 10.9SDK
-    wget https://github.com/phracker/MacOSX-SDKs/releases/download/10.13/MacOSX10.9.sdk.tar.xz
+    wget --quiet https://github.com/phracker/MacOSX-SDKs/releases/download/10.13/MacOSX10.9.sdk.tar.xz
     tar -c 10.9SDK -xf MacOSX10.9.sdk.tar.xz
     export CONDA_BUILD_SYSROOT=$(pwd)/MacOSX10.9.sdk
     echo "CONDA_BUILD_SYROOT=${CONDA_BUILD_SYSROOT}"
