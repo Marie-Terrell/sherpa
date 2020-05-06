@@ -11,14 +11,20 @@ then
     compilers="gcc_linux-64 gxx_linux-64 gfortran_linux-64"
 else  # osx
     miniconda_os=MacOSX
+    
+    #Conda compilers
     #Unset the Travis compiler variables to force use of the Conda compiler
     unset CC CFLAGS CXXFLAGS
     compilers="clang_osx-64 clangxx_osx-64 gfortran_osx-64"
-    #Set the location of the macOS SDK for the Conda Compilers to work
+    #Download and set the location of the macOS 10.9 SDK for the Conda Compilers to work
     # Not needed if not using the Conda compilers
-    export CONDA_BUILD_SYSROOT="`xcrun --sdk macosx --show-sdk-path`"
+    mkdir -p /opt
+    cd /opt
+    wget https://github.com/phracker/MacOSX-SDKs/releases/download/10.13/MacOSX10.9.sdk.tar.xz
+    tar -xf MacOSX10.9.sdk.tar.xz
+    export CONDA_BUILD_SYSROOT="/opt/MacOSX10.9.sdk"
     echo "CONDA_BUILD_SYROOT=${CONDA_BUILD_SYSROOT}"
-    ls $CONDA_BUILD_SYSROOT
+    #End of Conda compilers
 fi
 
 # Download and install conda
@@ -69,14 +75,3 @@ export F90=${F77}
 
 # This is required to make sure that the CIAO python extensions being built pick the correct flags
 export PYTHON_LDFLAGS=" "
-
-if [[ ${TRAVIS_OS_NAME} == osx ]];
-then
-    export PREFIX="${CONDA_PREFIX}"
-    export CONDA_BUILD="1"
-    conda activate build
-    export CFLAGS="${CFLAGS} -isysroot `xcrun --show-sdk-path` -mmacosx-version-min=10.9"
-    export CXXFLAGS="${CXXFLAGS} -isysroot `xcrun --show-sdk-path` -mmacosx-version-min=10.9"
-    echo "CFLAGS=${CFLAGS}"
-    echo "CXXFLAGS="${CFLAGS}""
-fi
