@@ -24,7 +24,7 @@ else  # osx
       echo "macOS 10.9 SDK download failed"
     fi
     tar -C 10.9SDK -xf MacOSX10.9.sdk.tar.xz
-    export CONDA_BUILD_SYSROOT=$(pwd)/MacOSX10.9.sdk
+    export CONDA_BUILD_SYSROOT=$(pwd)/10.9SDK/MacOSX10.9.sdk
     echo "CONDA_BUILD_SYROOT=${CONDA_BUILD_SYSROOT}"
     #End of Conda compilers
 fi
