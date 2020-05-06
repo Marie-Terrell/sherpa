@@ -19,7 +19,6 @@ else  # osx
     export CONDA_BUILD_SYSROOT="`xcrun --sdk macosx --show-sdk-path`"
     echo "CONDA_BUILD_SYROOT=${CONDA_BUILD_SYSROOT}"
     ls $CONDA_BUILD_SYSROOT
-    export CONDA_BUILD="1"
 fi
 
 # Download and install conda
@@ -73,6 +72,9 @@ export PYTHON_LDFLAGS=" "
 
 if [[ ${TRAVIS_OS_NAME} == osx ]];
 then
+    export PREFIX="${CONDA_PREFIX}"
+    export CONDA_BUILD="1"
+    conda activate build
     export CFLAGS="${CFLAGS} -isysroot `xcrun --show-sdk-path` -mmacosx-version-min=10.9"
     export CXXFLAGS="${CXXFLAGS} -isysroot `xcrun --show-sdk-path` -mmacosx-version-min=10.9"
     echo "CFLAGS=${CFLAGS}"
