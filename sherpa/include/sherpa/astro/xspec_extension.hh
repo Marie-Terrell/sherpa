@@ -54,6 +54,14 @@ extern "C" {
                                   const int& spectrumNumber,
                                   float* flux,
                                   float* fluxError);
+
+        typedef void (xsF77Call) (const double* energyArray,
+                                  const int& Nenergy,
+                                  const double* parameterValues,
+                                  const int& spectrumNumber,
+                                  double* flux,
+                                  double* fluxError);
+
         typedef void (xsccCall)   (const Real* energyArray,
                                    int Nenergy,
                                    const Real* parameterValues,
@@ -671,6 +679,22 @@ static void create_output(int nbins, T &a, T &b) {
       }; // class xspecModelFctF
 
 
+      template<typename Real, typename RealArray, xsF77Call XSpecFunc>
+      class xspecModelFctFD : public xspecModelFctBase<Real, RealArray>  {
+      public:
+
+        xspecModelFctFD( PyObject* args, npy_intp NumPars, bool HasNorm )
+          : xspecModelFctBase<Real, RealArray>( args, NumPars, HasNorm ) { }
+
+        void call_xspec( RealArray& result ) {
+          XSpecFunc( &this->ear[0], this->npts, &this->pars[0], this->ifl,
+                     &result[0], &this->error[0] );
+          return;
+        }
+
+      }; // class xspecModelFctFD
+
+
       template<typename Real, typename RealArray>
       class xspecModelFctConBase {
       public:
@@ -870,6 +894,32 @@ PyObject* xspecmodelfct( PyObject* self, PyObject* args ) {
     xspecModelFctF<float, FloatArray, XSpecFunc>( args, NumPars, HasNorm );
   try {
     FloatArray result;
+    xspec_model.eval( result );
+    return result.return_new_ref();
+  } catch(const NoError& re) {
+    return NULL;
+  } catch(const ValueError& re) {
+    PyErr_SetString( PyExc_ValueError, re.what() );
+    return NULL;
+  } catch(const TypeError& re) {
+    PyErr_SetString( PyExc_TypeError, re.what() );
+    return NULL;
+  } catch(...) {
+    // Even though the XSPEC model function is Fortran, it could call
+    // C++ functions, so swallow exceptions here
+    PyErr_SetString( PyExc_ValueError, xspec_model.get_err_msg() );
+    return NULL;
+  }
+
+}
+
+template <npy_intp NumPars, bool HasNorm, xsF77Call XSpecFunc>
+PyObject* xspecmodelfct_dbl( PyObject* self, PyObject* args ) {
+
+  xspecModelFctFD<double, DoubleArray, XSpecFunc> xspec_model =
+    xspecModelFctFD<double, DoubleArray, XSpecFunc>( args, NumPars, HasNorm );
+  try {
+    DoubleArray result;
     xspec_model.eval( result );
     return result.return_new_ref();
   } catch(const NoError& re) {
@@ -1169,6 +1219,11 @@ PyObject* xspectablemodel( PyObject* self, PyObject* args, PyObject *kwds ) {
 
 #define XSPECMODELFCT(name, npars)  _XSPECFCTSPEC(name, npars, false)
 #define XSPECMODELFCT_NORM(name, npars)  _XSPECFCTSPEC(name, npars, true)
+
+// double precision
+#define XSPECMODELFCT_DBL(name, npars) \
+		FCTSPEC(name, (sherpa::astro::xspec::xspecmodelfct_dbl< npars, false, \
+				name##_ >))
 
 #define XSPECMODELFCT_C(name, npars) \
 		FCTSPEC(name, (sherpa::astro::xspec::xspecmodelfct_C< npars, false, name >))

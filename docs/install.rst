@@ -253,7 +253,7 @@ match the contents of the XSPEC installation.
 1. If the full XSPEC 12.12.1 system has been built then use::
 
        with-xspec = True
-       xspec_version = 12.12.0
+       xspec_version = 12.12.1
        xspec_lib_dirs = $HEADAS/lib
        xspec_include_dirs = $HEADAS/include
        xspec_libraries = XSFunctions XSUtil XS hdsp_6.30
