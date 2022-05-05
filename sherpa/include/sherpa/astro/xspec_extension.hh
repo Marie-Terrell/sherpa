@@ -71,15 +71,23 @@ extern "C" {
 // available in C++ scope.
 //
 // In XSPEC 12.11.0 (the next one after 12.10.1), the tabint function
-// was moved into C scope.
+// was moved into C scope. In XSPEC 12.12.1 the signature was changed
+// to mark more arguments as const.
 //
 #ifdef XSPEC_12_10_1
 #ifdef XSPEC_12_11_0
 extern "C" {
 #endif
 
-  void tabint(float* ear, int ne, float* param, int npar, const char* filenm, int ifl,
+#ifndef XSPEC_12_12_1
+  void tabint(float* ear, int ne, float* param,
+	      int npar, const char* filenm, int ifl,
 	      const char* tabtyp, float* photar, float* photer);
+#else
+  void tabint(const float* ear, const int ne, const float* param,
+	      const int npar, const char* filenm, int ifl,
+	      const char* tabtyp, float* photar, float* photer);
+#endif
 
 #ifdef XSPEC_12_11_0
 }
