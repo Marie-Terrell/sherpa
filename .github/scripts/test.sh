@@ -39,6 +39,7 @@ fi
 if [ ${TEST} == submodule ]; then
     conda install -yq pytest-cov;
 
+    echo "python setup.py -q test -a \"${DOCTEST} --cov sherpa --cov-report xml\""
     python setup.py -q test -a "${DOCTEST} --cov sherpa --cov-report xml" || exit 1;
 fi
 
