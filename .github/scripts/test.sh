@@ -41,7 +41,7 @@ cd /home
 sherpa_smoke ${smokevars} || exit 1
 
 # Set command to run doctests if XSPEC and test data are present
-if [ -n "${XSPECVER}" ] && [ ${TEST} == package ]; then
+if [ -n "${XSPECVER}" ] && [ ${TEST} == "package" -o ${TEST} == "submodule" ]; then
     DOCTEST="--doctest-plus";
     conda install -yq pytest-doctestplus;
 fi
@@ -52,6 +52,7 @@ if [ ${TEST} == package ] || [ ${TEST} == none ]; then
     conda install -yq pytest-cov;
     
     # This automatically picks up the sherpatest module when TEST==package
+    echo "sherpa_test $DOCTEST --cov sherpa --cov-report xml"
     sherpa_test $DOCTEST --cov sherpa --cov-report xml || exit 1;
 fi
 
