@@ -10,6 +10,7 @@ on:
     - ciaox
     - 'releases/**'
     - gh-deployments
+    - check-branch-workflow
 
 #Reduces GH Action duplication:
 # Cancels the previous pipeline for this ref it is still running
