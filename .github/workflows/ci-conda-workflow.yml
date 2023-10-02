@@ -4,6 +4,7 @@ on:
   push:
     branches:
     - main
+    - numpy-1.26
     tags:
     - '*'
   pull_request:
