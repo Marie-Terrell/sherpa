@@ -1,6 +1,8 @@
 [build-system]
 requires = ["setuptools >= 51.0.0, < 60",
             "wheel",
-            "oldest-supported-numpy",
+            "numpy=='1.21'; python_version<='3.10'",
+            "numpy=='1.23'; python_version=='3.11'",
+            "numpy>=1.21.0',<1.26.0; python_version>='3.12'"
             ]
 build-backend = "setuptools.build_meta"
