@@ -4,6 +4,7 @@ on:
   push:
     branches:
     - main
+    - xspec12140
     tags:
     - '*'
   pull_request:
